@@ -5,9 +5,9 @@ Resources and learning modules covering methods, tools, tips, and tricks for any
 
 ###What's Here
 
-- Introductions to Key Concepts in Data Science (markdown files)
-- Resource lists
-- Learning Modules
+- Introductions to key concepts (markdown files)
+- Resource lists (markdown files)
+- Learning Modules (folders)
 
 
 ###Directories
