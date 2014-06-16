@@ -65,6 +65,15 @@ To show you the power of iPython Notebook,I'm going to follow
 There are lots of great ways. In fact, one of the ways that people are pythonic are by smartly using data structures like tuples, lists, and dictionarys. Let's explore python data structures. You can follow along using the data structures notebook.
 
 
+###Fun with Baby Names
+
+Go [here](http://www.babynamewizard.com/baby-name) to find out the peak year of the popularity of your name.
+
+Now go [here](https://docs.google.com/spreadsheets/d/1HJxGgy-yUUe59IZRxBogw1Hvf8DxMxWe7GSv6X0rl90/edit?usp=sharing) and enter it into the spreadsheet.
+
+Lastly, go [here](http://www.ssa.gov/oact/babynames/limits.html) to download the names database.
+
+
 ###Working with Data: Energy Use by Participants in the Chicago Neighborhood Energy Challenge
 
 
