@@ -1,0 +1,8 @@
+\begin{tikzpicture}[scale=0.6]
+\begin{axis}[standard,xlabel=$x$,ylabel=$x^2$,xticklabels={,,},yticklabels={,,}]
+\addplot [domain=-5:4, samples=10,mark=triangle,mark options={blue,solid},draw=none]{x+x^2};
+\addplot+ [domain=-10:-6, samples=5,mark=square,mark options={red,solid},draw=none]{x+x^2};
+\addplot+ [domain=5:9, samples=5,mark=square,mark options={red,solid},draw=none]{x+x^2};
+\addplot+ [domain=-10:10, samples=5,mark=none,blue]{24};
+\end{axis}
+\end{tikzpicture}
