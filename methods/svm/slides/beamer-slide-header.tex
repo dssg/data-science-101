@@ -1,0 +1,116 @@
+%\documentclass[10pt]{beamer}
+%\documentclass[10pt]{article}
+%\usepackage{xcolour-names}
+\usepackage[normalem]{ulem}
+\errorcontextlines=10
+\newtheorem{defi}{Definition}
+\mode<presentation>
+{
+  \usetheme{Warsaw}
+  %\usetheme[hideothersubsections]{Goettingen}
+  % or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+
+  \subject{Introduction to Machine Learning}
+%  \setbeamertemplate{footline}%
+%  {%
+%    \par\vspace*{-\baselineskip}\par%
+%    \raisebox{0.5ex}{\usebeamercolor[fg]{structure}%
+%      \ slide \insertframenumber/\inserttotalframenumber}%
+%  }%
+}
+\mode<article>
+{
+  \usepackage[a4paper,margin=10mm,includehead,headheight=15pt,headsep=5mm]%
+  {geometry}
+  \usepackage{graphicx}
+  \usepackage[noxcolor]{beamerarticle}
+  \usepackage{fancyhdr}%
+  \usepackage[breaklinks]{hyperref}%
+  \renewcommand{\floatpagefraction}{0.75} % default is .5, to increase
+  % density.
+  \renewcommand*{\bottomfraction}{0.6} % default is 0.3
+  \renewcommand*{\topfraction}{0.85} % default is 0.7
+  \renewcommand*{\textfraction}{0.1} % default is 0.2
+  \pagestyle{fancy}
+  \fancyhf{}
+  \newlength{\markWidth}
+  \setlength{\markWidth}{0.5\textwidth}
+  \newlength{\topicnumwidth}
+  \settowidth{\topicnumwidth}{1.114.3}
+  \addtolength{\markWidth}{-0.6\topicnumwidth}
+  %\addtolength{\headheight}{1.92ex}
+
+  \renewcommand{\sectionmark}[1]{\markright{\thesection. #1}}
+  \lhead{\parbox[t]{\markWidth}{\raggedright\nouppercase{\rightmark}}}
+  \rhead{\thepage}
+  \AtBeginDocument{\thispagestyle{empty}}
+}
+
+
+\usepackage[english]{babel}
+\usepackage{alltt,booktabs,array,multicol}
+
+%\usepackage[utf8]{inputenc}
+% or whatever
+
+%\usepackage{times}
+%\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+% See page 379 of the second edition of LaTeX Companion:
+\usepackage{pifont}
+\newcommand{\thintick}{\ding{'63}}% thinner
+\newcommand{\tick}{\ding{'64}}% fatter
+\newcommand{\thincross}{\ding{'67}}% thinner
+\newcommand{\cross}{\ding{'70}}% fatter
+
+\date{\today}
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \footnotesize
+%    \begin{multicols}{2}
+      \tableofcontents[currentsection,currentsubsection]
+%    \end{multicols}
+  \end{frame}
+}
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\newcounter{program}
+%\newcommand*{\program}[1]{\refstepcounter{program}\label{#1}\arabic{program}}
+% \newcommand*{\program}[1]{%
+%    \refstepcounter{program}\hypertarget{#1}{Program \texttt{#1}}%
+% }
+%\newcommand*{\program}[1]{\refstepcounter{program}\label{#1}\arabic{program}}
+\newcommand*{\program}[1]{%
+   \hypertarget{#1}{Program \texttt{#1}}%
+}
+
+\newcommand*{\linkto}[1]{\hyperlink{#1}{\texttt{#1}}}
+\providecommand*{\bs}{\texttt{\char '134}} % Backslash, no break
+
+\newcommand{\cmd}[1]{%
+  \texttt{\$ \textbf{#1 \(\hookleftarrow\)}}
+}
+
+\newcommand{\cmdbox}[1]{%
+  \mbox{\texttt{\$ \textbf{#1 \(\hookleftarrow\)}}}
+}
+
+\newcommand{\rootcmd}[1]{%
+  \texttt{\# \textbf{#1 \(\hookleftarrow\)}}
+}
+
+\newcommand{\opt}[1]{%
+  {\bfseries\texttt{#1}}
+}
+

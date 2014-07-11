@@ -1,0 +1,7 @@
+\begin{tikzpicture}[scale=0.4]
+\begin{axis}[]
+\addplot[mark=triangle,mark options={blue}, draw=none] file {data0.txt};
+\addplot+[mark=square,mark options={red},draw=none] file {data1.txt};
+\only<2->{\draw[color=black] (axis cs:0,0) circle (240);}
+\end{axis}
+\end{tikzpicture}

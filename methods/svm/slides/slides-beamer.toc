@@ -1,0 +1,16 @@
+\beamer@endinputifotherversion {3.31pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Supervised Learning}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Learning Parameters}{5}{0}{1}
+\beamer@subsectionintoc {1}{2}{Risk Minimization for Parameter Learning}{7}{0}{1}
+\beamer@sectionintoc {2}{Grouping Learning Algorithms}{12}{0}{2}
+\beamer@subsectionintoc {2}{1}{0-1 Loss}{15}{0}{2}
+\beamer@subsectionintoc {2}{2}{Approximation to 0-1 Loss}{16}{0}{2}
+\beamer@sectionintoc {3}{Maximum Margin Classifiers}{26}{0}{3}
+\beamer@subsectionintoc {3}{1}{Boundary with Maximum Margin}{32}{0}{3}
+\beamer@sectionintoc {4}{Support Vector Machines}{35}{0}{4}
+\beamer@subsectionintoc {4}{1}{SVM Learning}{37}{0}{4}
+\beamer@subsectionintoc {4}{2}{SVM for Non-Separable Case}{47}{0}{4}
+\beamer@subsectionintoc {4}{3}{Optimization Constraints}{53}{0}{4}
+\beamer@sectionintoc {5}{More About Kernels}{56}{0}{5}
+\beamer@subsectionintoc {5}{1}{Gaussian Kernel}{60}{0}{5}

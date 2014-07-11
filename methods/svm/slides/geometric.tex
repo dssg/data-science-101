@@ -1,0 +1,15 @@
+\begin{figure}
+\centering
+\begin{tikzpicture}[scale=0.7]
+  \begin{axis}[xlabel=$x_1$,ylabel=$x_2$,xticklabels={},yticklabels={},xmin=0,xmax=6,ymin=0,ymax=6,axis lines=middle,legend style={nodes=right},legend pos= outer north east,clip=false]
+    \draw [thick] (-0.2,6) -- (5.9,-.1);
+    \addplot+[only marks,x=x,y=y,mark=+,draw=blue] table {d1.dat};
+    \addplot+[only marks,x=x,y=y,mark=*,draw=blue] table {d2.dat};
+    \legend{$+1$,$-1$};
+    \only<2->{\addplot[red  ,thick,no markers] coordinates {(-0.2,6.2) (6.1,-.1)};}
+    \only<4->{\addplot[blue  ,thick,no markers] coordinates {(-0.2,6.6) (5.6,-.1)};}
+    \only<5->{\addplot[green  ,thick,no markers] coordinates {(-0.2,6) (5.9,-.1)};}
+    \only<5->{\addplot[black  ,thick,no markers] coordinates {(-0.2,5.9) (6.4,-.1)};}
+  \end{axis}
+\end{tikzpicture}
+\end{figure}

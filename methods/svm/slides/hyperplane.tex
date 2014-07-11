@@ -1,0 +1,11 @@
+%\begin{figure}
+%\centering
+\begin{tikzpicture}[scale=0.7]
+  \begin{axis}[xticklabels={},yticklabels={},xmin=0,xmax=6,ymin=0,ymax=6,axis lines=middle,clip=false]
+    \addplot[blue,ultra thick,no markers] coordinates {(1.0,1.0) (5,5)};
+    \addplot[blue,ultra thick,no markers,->] coordinates {(3,3) (2,4.3)}
+    node[above] {$\mathbf{w}$};
+%    \draw (3,3) node {$\mathbf{w}$};
+  \end{axis}
+\end{tikzpicture}
+%\end{figure}
