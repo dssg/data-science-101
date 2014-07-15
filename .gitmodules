@@ -1,3 +1,6 @@
 [submodule "Tools/cli/psample"]
 	path = Tools/cli/psample
 	url = git://github.com/samzhang111/psample
+[submodule "LearningLunch/flask-demo"]
+	path = LearningLunch/flask-demo
+	url = https://github.com/samzhang111/flask-demo.git
