@@ -1,4 +1,4 @@
-export PGHOST='dssgsummer2014postgres.c5faqozfo86k.us-west-2.rds.amazonaws.com'
+export PGHOST='postgres.com'
 export PGUSER='mynameismattgee'
 export PGDATABASE='training_2015'
 export PGPASSWORD='rRocksPythonKnocks'
