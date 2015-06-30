@@ -1,0 +1,268 @@
+
+## DATA STORAGE
+## SQL: DATA DEFINITION LANGUAGE EXAMPLES
+
+# some of these commands run on *nix command lines (CL)
+# some of these commands run in Postgres (SQL)
+# I note which before the command
+#
+# You should change the schema from jwalsh to your own
+
+
+
+# CL: this loads Postgres environment variables so I don't need to use h, d, U options with psql
+# This is a good way to hide your database information from GitHub. Add default_profile
+# to your gitignore.
+source default_profile
+
+
+##############################
+##							##
+## DATA DEFINITION LANGUAGE ##
+##							##
+##############################
+
+# DDL lets you define your database structure: the schema, the tables, the columns,
+# and the types of and relationships between each. Databases often force the user to
+# clearly identify these things. While sometimes inconvenient, it can help ensure
+# data integrity. To great frustration we've all found a random character in the middle 
+# of an integer column in Excel, but a DDL that specifies an integer problem can 
+# prevent that -- most databases will refuse to accept data that do not comply with
+# the user's specifications.
+
+
+
+
+
+##############################
+## A TABLE AND A VIEW
+## The view depends on the table. The database remembers that and enforces the relationship.
+
+# SQL: create a table with column x. x accepts up to 32 characters
+create table jwalsh.example (x VARCHAR(32));
+
+# SQL: create view
+create view jwalsh.example_view as (select * from jwalsh.example limit 1000);
+
+# SQL: views make data available in the format you want without saving the data multiple times.
+# Why? They store the queries rather than the data. Every time you query a view, the view's
+# query runs. Look at the details and note that the query is stored.
+\d+ jwalsh.example_view 
+
+# SQL: look at the original table
+select * from jwalsh.example;
+
+# SQL: look at the view. Note that the view is effectively a table for our purposes
+select * from jwalsh.example_view;
+
+# CL: no data in the table. Let's create random data and push to jwalsh.example
+# create 3,141,592 rows of randomly generated characters 32 characters long and save in test.txt
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 3141592 > test.txt
+
+# CL: Our file is 99 MB. Copy is really fast! Every copy comes with a fixed cost and a marginal cost.
+# That means copy is more efficient for large datasets. I have copied 99 GB in roughly two hours.
+cat test.txt | psql -c "copy jwalsh.example from stdin;"
+
+# SQL: check original table. The data are there!
+select count(*) from jwalsh.example;
+select * from jwalsh.example limit 100;
+
+# SQL: check view. The first 1000 rows appear there too! (We wrote the view to only keep the first 1000.)
+select count(*) from jwalsh.example_view;
+select * from jwalsh.example_view limit 100;
+
+# SQL: delete observations from jwalsh.example
+delete from jwalsh.example;
+
+# SQL: the table is empty
+select count(*) from jwalsh.example;
+
+# SQL: the view appears empty too
+select count(*) from jwalsh.example_view;
+
+# SQL: try dropping table
+drop table jwalsh.example;
+
+# It doesn't work because SQL knows the view depends on the table. You need to drop the view 
+# first or you need to use the CASCADE, which does what it needs to do with dependencies.
+# SQL: have to drop the view first or the table and view together 
+drop table jwalsh.example cascade;
+
+# SQL: both the table and the view are gone
+\dt jwalsh.*
+\dv jwalsh.*
+
+
+
+
+
+
+##############################
+## IMPLEMENT CONSTRAINTS IN A TABLE
+## We can force additional constraints on the table, e.g. unique values within a column.
+## This can ensure data integrity and help speed searches
+
+# SQL: recreate the table
+create table jwalsh.example (x VARCHAR(32));
+
+# SQL: recreate the view
+create view jwalsh.example_view as (select * from jwalsh.example limit 1000);
+
+# CL: Re-upload the data
+cat test.txt | psql -c "copy jwalsh.example from stdin;"
+
+# SQL: check that the data are there
+select count(*) from jwalsh.example;
+select count(*) from jwalsh.example_view;
+
+# SQL: add primary key to original table. A primary key identifies a specific row, so
+# each primary key value must be unique (if two rows have a primary key value of 5,
+# 5 does not uniquely identify that row.) This creates a new column with a constraint.
+# serial automatically assigns incrementing integer values to each row
+alter table jwalsh.example add column id serial primary key;
+
+# SQL: you can see the constraint here. It's automatically called "example_pkey"
+\d+ jwalsh.example
+
+# SQL: note: a primary key is a column that uniquely identifies each row in the database.
+# You can have one primary key but multiple unique, not-null columns per table. Try
+# adding another primary key:
+alter table jwalsh.example add column id2 serial primary key;
+
+# SQL: you can also view all the indices in the database. When you create a primary key,
+# Postgres automatically creates an index.  
+\di+ 
+
+# SQL: view original table
+select * from jwalsh.example limit 100;
+
+# SQL: will the view show the new column? 
+select * from jwalsh.example_view limit 100;
+
+# SQL: no! Postgres automatically converted "select *" to "select example.x" when we created
+# the view. Then we added the column. The view doesn't know the new column exists.
+\d+ jwalsh.example_view
+
+# CL: insert the data into the table again
+cat test.txt | psql -c "copy jwalsh.example from stdin;"
+
+# CL: Error! Primary keys are required fields ("not null" constraint). The database demands 
+# an id value. Let's insert new data plus a primary key of 1
+echo yes we can,1 | psql -c "copy jwalsh.example from stdin with csv;"
+
+# CL: Error! Primary key 1 already exists. Postgres refuses data that conflicts with 
+# a uniqueness constraint. Let's add the same data with a completely new primary key:
+echo yes we can,10000000 | psql -c "copy jwalsh.example from stdin with csv;"
+
+# SQL: check that the data are there. WOOOO!
+select * from jwalsh.example where id > 5000000;
+
+# SQL: Note that a primary key created with 'serial' does not require all keys to be sequential.
+# This gives us freedom to, say, delete rows in the middle without replacing them
+delete from jwalsh.example where id = 2;
+
+# SQL: check the first 10 rows. id 2 is gone!
+select * from jwalsh.example limit 10;
+
+# SQL: can you insert data with id 2?
+insert into jwalsh.example values('"R rocks." -- Matt Gee', 2);
+
+# SQL: yes! there is no id 2 in the table, so we do not violate the uniqueness constraint
+# by inserting data there
+select * from jwalsh.example order by id limit 10;
+
+# SQL: let's drop that column (and hence constraint):
+alter table jwalsh.example drop column id;
+
+# SQL: we can add constraints without adding a column, but we need a unique set of 
+# columns to do it. x is likely unique, so I use it to create the primary key:
+create index example_pkey2 on jwalsh.example (x);
+
+# SQL: check the indices on jwalsh.example
+\d+ jwalsh.example
+
+# SQL: Let's drop the id column (and hence the primary key)
+alter table jwalsh.example drop column id;
+
+# SQL: the primary key does not have to be an integer or even a separate column.
+# Here I add a primary key using column x:
+alter table jwalsh.example add constraint example_pkey primary key (x);
+
+# SQL: check for the primary key
+\d+ jwalsh.example
+
+
+
+
+
+
+##############################
+## IMPLEMENT CONSTRAINTS BETWEEN TABLES
+## We can force additional constraints between tables, e.g. police department can't attribute a stop to an officer who doesn't exist in the officers table
+## This can ensure table relationships remain intact
+
+# SQL: create a new table based on the old table
+create table jwalsh.table_for_foreign_key as (select x from jwalsh.example limit 50000);
+
+# SQL: create foreign key. Foreign keys point to primary keys in other tables. The syntax past 
+# "add constraint": the name of the foreign key you're creating, then "foreign key", then the
+# column (not index) that the primary key is based on, then "references", then the foreign table,
+# then the foreign table's column on which the column is based.
+alter table jwalsh.table_for_foreign_key add constraint fk_example foreign key (x) references jwalsh.example (x);
+
+# SQL: try to add a value that doesn't exist in jwalsh.example.x
+insert into jwalsh.table_for_foreign_key values ('Kenny brought his wife');
+
+# That's a violation of the foreign key constraint, so it didn't work.
+
+# SQL: check constraints on original table. The foreign key appears!
+\d+ jwalsh.example
+
+# SQL: try dropping jwalsh.example. You can't do it because the foreign key establishes a dependency
+drop table jwalsh.example;
+
+# SQL: you have to use cascade again
+drop table jwalsh.example cascade;
+
+# SQL: that dropped the jwalsh.example and the dependency but not jwalsh.table_for_foreign_key
+\dt jwalsh.*
+drop table jwalsh.table_for_foreign_key;
+
+
+
+
+##############################
+## ALTER TABLE, ADD CONDITIONAL COLUMNS
+
+# SQL: re-create the table
+create table jwalsh.example (x VARCHAR(32));
+
+# CL: push data again
+cat test.txt | psql -c "copy jwalsh.example from stdin;"
+
+# SQL: add primary key
+alter table jwalsh.example add column id serial primary key;
+
+# SQL: Add empty character column with max length 10
+alter table jwalsh.example add column new_column varchar(10);
+
+# SQL: check whether the column is there
+select * from jwalsh.example limit 20;
+
+# SQL: set new_column equal to id when id < 5
+update jwalsh.example set new_column = id where id < 5;
+
+# SQL: Check whether it updated correctly
+select * from jwalsh.example order by id limit 20;
+
+# SQL: set new_column equal to id when 16 <= id <= 18
+update jwalsh.example set new_column = id where id between 16 and 18;
+
+# SQL: check results
+select * from jwalsh.example order by id limit 20;
+
+# CL: copy data back to hard drive. Check the data on the command line. It's the same.
+# Notice how slow the command line is. That's because I sort using csvkit, which is
+# slow for large datasets.
+psql -c "copy jwalsh.example to stdout with csv header;" > updated_data.csv
+cat updated_data.csv | csvsort -c2 | head -n 20 | csvlook
